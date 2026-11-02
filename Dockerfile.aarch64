@@ -13,7 +13,8 @@ LABEL maintainer="thelamer"
 ENV TITLE="Craft Apps" \
     NO_FULL=true \
     SELKIES_DESKTOP=true \
-    PIXELFLUX_WAYLAND=true
+    PIXELFLUX_WAYLAND=true \
+    DISABLE_AUTOUPDATER=1
 
 RUN \
   echo "**** add icon ****" && \
@@ -39,7 +40,7 @@ RUN \
     /tmp/photocraft.deb -L \
     "https://github.com/storytold/photocraft/releases/download/${PHOTOCRAFT_RELEASE}/photocraft-$(echo ${PHOTOCRAFT_RELEASE} | sed 's/^v//g')-linux-aarch64.deb" && \
   echo "**** install craft suite ****" && \
-  for APP in designcraft effectcraft figcraft filmcraft lightcraft pdfcraft vectorcraft cadcraft wordcraft deckcraft gridcraft; do \
+  for APP in designcraft effectcraft figcraft filmcraft lightcraft pdfcraft vectorcraft cadcraft wordcraft deckcraft gridcraft craft-anything; do \
     APP_RELEASE=$(curl -sX GET "https://api.github.com/repos/storytold/${APP}/releases/latest" \
       | jq -r '.tag_name') && \
     curl -o \
@@ -54,6 +55,17 @@ RUN \
   curl -o \
     /tmp/solidcraft.deb -L \
     "https://github.com/tangency-labs/solidcraft/releases/download/${SOLIDCRAFT_RELEASE}/solidcraft-$(echo ${SOLIDCRAFT_RELEASE} | sed 's/^v//g')-linux-aarch64.deb" && \
+  echo "**** install claude code ****" && \
+  if [ -z ${CLAUDE_CODE_RELEASE+x} ]; then \
+    CLAUDE_CODE_RELEASE=$(curl -sL "https://downloads.claude.ai/claude-code-releases/latest"); \
+  fi && \
+  curl -o \
+    /usr/bin/claude -L \
+    "https://downloads.claude.ai/claude-code-releases/${CLAUDE_CODE_RELEASE}/linux-arm64/claude" && \
+  curl -sL "https://downloads.claude.ai/claude-code-releases/${CLAUDE_CODE_RELEASE}/manifest.json" \
+    | jq -r '.platforms["linux-arm64"].checksum + "  /usr/bin/claude"' \
+    | sha256sum -c - && \
+  chmod +x /usr/bin/claude && \
   apt-get install -y --no-install-recommends \
     /tmp/*.deb && \
   echo "**** application tweaks ****" && \

@@ -17,5 +17,6 @@
 <item label="WordCraft" icon="/usr/share/icons/hicolor/48x48/apps/ai.storyteller.wordcraft.png"><action name="Execute"><command>/usr/bin/wordcraft</command></action></item>
 <item label="DeckCraft" icon="/usr/share/icons/hicolor/48x48/apps/ai.storyteller.deckcraft.png"><action name="Execute"><command>/usr/bin/deckcraft</command></action></item>
 <item label="GridCraft" icon="/usr/share/icons/hicolor/48x48/apps/ai.storyteller.gridcraft.png"><action name="Execute"><command>/usr/bin/gridcraft</command></action></item>
+<item label="Craft Anything" icon="/usr/share/icons/hicolor/48x48/apps/ai.storyteller.craft-anything.png"><action name="Execute"><command>/usr/bin/craft-anything</command></action></item>
 </menu>
 </openbox_menu>
