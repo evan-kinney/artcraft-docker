@@ -46,6 +46,14 @@ RUN \
       /tmp/${APP}.deb -L \
       "https://github.com/storytold/${APP}/releases/download/${APP_RELEASE}/${APP}-$(echo ${APP_RELEASE} | sed 's/^v//g')-linux-aarch64.deb"; \
   done && \
+  echo "**** install solidcraft ****" && \
+  if [ -z ${SOLIDCRAFT_RELEASE+x} ]; then \
+    SOLIDCRAFT_RELEASE=$(curl -sX GET "https://api.github.com/repos/tangency-labs/solidcraft/releases/latest" \
+      | jq -r '.tag_name'); \
+  fi && \
+  curl -o \
+    /tmp/solidcraft.deb -L \
+    "https://github.com/tangency-labs/solidcraft/releases/download/${SOLIDCRAFT_RELEASE}/solidcraft-$(echo ${SOLIDCRAFT_RELEASE} | sed 's/^v//g')-linux-aarch64.deb" && \
   apt-get install -y --no-install-recommends \
     /tmp/*.deb && \
   echo "**** application tweaks ****" && \
